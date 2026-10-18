@@ -1,0 +1,32 @@
+<%- include('../partials/header', { title: 'People' }) %>
+
+<h1>People</h1>
+<p class="empty">Pick someone to follow and their posts show up in your feed.</p>
+
+<ul class="people">
+  <% users.forEach(function (u) { %>
+    <li>
+      <span class="avatar">
+        <span class="initials"><%= u.displayName.trim().charAt(0).toUpperCase() %></span>
+        <img src="<%= u.avatarUrl %>" alt="" onerror="this.remove()">
+      </span>
+      <div class="who">
+        <a class="author" href="/users/<%= u.username %>"><%= u.displayName %></a>
+        <span class="handle">@<%= u.username %> · <%= u._count.posts %> posts · <%= u._count.followers %> followers</span>
+      </div>
+      <% if (u.relation === 'self') { %>
+        <span class="pill">You</span>
+      <% } else if (u.relation === 'accepted') { %>
+        <span class="pill">Following</span>
+      <% } else { %>
+        <form method="post" action="/users/<%= u.id %>/follow">
+          <button class="<%= u.relation === 'none' ? 'primary' : '' %>">
+            <%= u.relation === 'none' ? 'Follow' : 'Cancel request' %>
+          </button>
+        </form>
+      <% } %>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('../partials/footer') %>

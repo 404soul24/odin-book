@@ -1,0 +1,30 @@
+<%- include('partials/header', { title: 'Feed' }) %>
+
+<% if (pendingRequests.length) { %>
+  <section class="requests">
+    <h2>Follow requests</h2>
+    <% pendingRequests.forEach(function (r) { %>
+      <div class="request">
+        <a class="author" href="/users/<%= r.follower.username %>"><%= r.follower.displayName %></a>
+        <span class="handle">wants to follow you</span>
+        <form method="post" action="/requests/<%= r.id %>/accept"><button>Accept</button></form>
+        <form method="post" action="/requests/<%= r.id %>/decline"><button class="link">Decline</button></form>
+      </div>
+    <% }) %>
+  </section>
+<% } %>
+
+<form method="post" action="/posts" class="composer">
+  <textarea name="content" rows="3" placeholder="What's on your mind?" maxlength="2000" required></textarea>
+  <button>Post</button>
+</form>
+
+<h1 class="sr-only">Your feed</h1>
+<% if (!posts.length) { %>
+  <p class="empty">Nothing here yet. Write your first post, or <a href="/users">find people</a> to follow.</p>
+<% } %>
+<% posts.forEach(function (post) { %>
+  <%- include('partials/post', { post: post }) %>
+<% }) %>
+
+<%- include('partials/footer') %>

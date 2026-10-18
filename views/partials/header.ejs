@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= typeof title !== 'undefined' ? title : 'Odin Book' %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">Odin Book</a>
+    <nav>
+      <% if (currentUser) { %>
+        <a href="/">Feed</a>
+        <a href="/users">People</a>
+        <span class="me">
+          <img class="avatar sm" src="<%= currentUser.avatarUrl %>" alt=""
+               onerror="this.style.display='none'">
+          <a href="/users/<%= currentUser.username %>"><%= currentUser.displayName %></a>
+        </span>
+        <form method="post" action="/logout"><button class="link">Log out</button></form>
+      <% } else { %>
+        <a href="/login">Log in</a>
+        <a href="/signup">Sign up</a>
+      <% } %>
+    </nav>
+  </header>
+  <main>

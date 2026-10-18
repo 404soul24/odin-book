@@ -1,0 +1,9 @@
+<%- include('partials/header', { title: code + '' }) %>
+
+<section class="card">
+  <h1><%= code %></h1>
+  <p><%= message %></p>
+  <% if (currentUser) { %><a class="button" href="/">Back to feed</a><% } else { %><a href="/login">Log in</a><% } %>
+</section>
+
+<%- include('partials/footer') %>

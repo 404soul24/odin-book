@@ -1,0 +1,16 @@
+<%- include('../partials/header', { title: 'Sign up' }) %>
+
+<section class="card">
+  <h1>Create an account</h1>
+  <% if (error) { %><p class="error"><%= error %></p><% } %>
+  <form method="post" action="/signup">
+    <label>Username <input name="username" value="<%= values.username || '' %>" required autofocus></label>
+    <label>Display name <input name="displayName" value="<%= values.displayName || '' %>" required></label>
+    <label>Email <input type="email" name="email" value="<%= values.email || '' %>" required></label>
+    <label>Password <input type="password" name="password" minlength="8" required></label>
+    <button>Sign up</button>
+  </form>
+  <p class="alt">Already registered? <a href="/login">Log in</a></p>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,39 @@
+<article class="post">
+  <header class="post-head">
+    <span class="avatar">
+      <span class="initials"><%= post.author.displayName.trim().charAt(0).toUpperCase() %></span>
+      <img src="<%= post.author.avatarUrl %>" alt="" onerror="this.remove()">
+    </span>
+    <div>
+      <a class="author" href="/users/<%= post.author.username %>"><%= post.author.displayName %></a>
+      <a class="handle" href="/users/<%= post.author.username %>">@<%= post.author.username %></a>
+      <time><%= post.createdAt.toLocaleString() %></time>
+    </div>
+  </header>
+
+  <p class="content"><%= post.content %></p>
+
+  <div class="actions">
+    <form method="post" action="/posts/<%= post.id %>/like">
+      <button class="like <%= post.likes.length ? 'on' : '' %>">
+        <%= post.likes.length ? 'Liked' : 'Like' %> · <%= post._count.likes %>
+      </button>
+    </form>
+    <span class="count"><%= post._count.comments %> comment<%= post._count.comments === 1 ? '' : 's' %></span>
+  </div>
+
+  <section class="comments">
+    <% post.comments.forEach(function (c) { %>
+      <div class="comment">
+        <a class="author" href="/users/<%= c.author.username %>"><%= c.author.displayName %></a>
+        <span class="handle">@<%= c.author.username %></span>
+        <p><%= c.content %></p>
+      </div>
+    <% }) %>
+
+    <form method="post" action="/posts/<%= post.id %>/comment" class="comment-form">
+      <input type="text" name="content" placeholder="Write a comment…" maxlength="1000" required>
+      <button>Comment</button>
+    </form>
+  </section>
+</article>

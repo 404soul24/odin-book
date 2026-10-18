@@ -1,0 +1,37 @@
+<%- include('../partials/header', { title: user.displayName }) %>
+
+<section class="profile-head">
+  <span class="avatar xl">
+    <span class="initials"><%= user.displayName.trim().charAt(0).toUpperCase() %></span>
+    <img src="<%= user.avatarUrl %>" alt="" onerror="this.remove()">
+  </span>
+  <div>
+    <h1><%= user.displayName %></h1>
+    <p class="handle">@<%= user.username %></p>
+    <p class="stats">
+      <strong><%= user._count.posts %></strong> posts ·
+      <strong><%= user._count.followers %></strong> followers ·
+      <strong><%= user._count.following %></strong> following
+      · joined <%= user.createdAt.toLocaleDateString() %>
+    </p>
+    <% if (relation === 'self') { %>
+      <span class="pill">This is you</span>
+    <% } else if (relation === 'accepted') { %>
+      <span class="pill">You follow this person</span>
+    <% } else { %>
+      <form method="post" action="/users/<%= user.id %>/follow">
+        <button class="<%= relation === 'none' ? 'primary' : '' %>">
+          <%= relation === 'none' ? 'Follow' : 'Cancel request' %>
+        </button>
+      </form>
+    <% } %>
+  </div>
+</section>
+
+<h2>Posts</h2>
+<% if (!posts.length) { %><p class="empty">No posts yet.</p><% } %>
+<% posts.forEach(function (post) { %>
+  <%- include('../partials/post', { post: post }) %>
+<% }) %>
+
+<%- include('../partials/footer') %>

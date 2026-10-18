@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
+  displayName  String
+  passwordHash String
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+
+  posts    Post[]
+  comments Comment[]
+  likes    Like[]
+
+  // Outgoing: people I asked to follow / who I follow
+  following Follow[] @relation("follower")
+  // Incoming: people who follow me
+  followers Follow[] @relation("following")
+}
+
+// One row = one follow request. status moves pending -> accepted.
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  status      String   @default("pending") // pending | accepted
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followingId, status])
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  content   String
+  authorId  Int
+  createdAt DateTime @default(now())
+
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments Comment[]
+  likes    Like[]
+
+  @@index([authorId, createdAt])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  postId    Int
+  authorId  Int
+  createdAt DateTime @default(now())
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  userId    Int
+  postId    Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // One like per user per post. Prisma treats this as the primary key.
+  @@id([userId, postId])
+}

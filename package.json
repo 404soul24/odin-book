@@ -1,0 +1,29 @@
+{
+  "name": "odin-book",
+  "version": "1.0.0",
+  "description": "A social media site",
+  "main": "app.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "seed": "node prisma/seeds.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seeds.js"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "prisma": "6.19.3"
+  }
+}
